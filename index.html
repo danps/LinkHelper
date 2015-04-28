@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>LinksHelper</title>
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> 
+	<link rel="stylesheet" href="vendor/bootstrap/css/docs.min.css"> 
+	<script language="javascript" src="vendor/jquery/jquery.min.js"></script> 
+	<script language="javascript" src="vendor/angular/angular.min.js"></script> 
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>  
+	<script src="vendor/bootstrap/js/docs.min.js"></script> 
+	<script src="app/controller/Home.js"></script>
+</head> 
+<body ng-app="App" ng-controller="HomeController">  
+	<div class="container bs-docs-container"> 
+		<header class="navbar navbar-static-top bs-docs-nav">
+			<nav class="navbar navbar-static-top bs-docs-nav">
+				<div class="container-fluid">
+					<div class="navbar-header"> 
+						<a class="navbar-brand" href="http://www.danps.com.br">LinkHelper</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li class="active">
+								<a target='blank' href="http://chrome.google.com/webstore/detail/danps-tab/mpchikeepohbnfgmopdfajdobolhgdnp?utm_source=chrome-app-launcher-info-dialog">
+									<span class="glyphicon glyphicon-dashboard">
+								</a>
+							</li> 
+						</ul> 
+					</div> 
+				</div>
+			</nav>
+		</header>
+		<div class="row">
+			<div class="col-md-12" role="main" id="top"> 
+								<div id="edit" class="panel panel-success" ng-show="checked">  
+					<div class="panel-heading">New</div>
+					<div class="panel-body">  
+						<div class="panel panel-default">	
+							<div class="panel-body">	
+								<div class="form-inline" role="form">
+									<div class="input-group input-group-sm">
+										Name <input class="form-control" type="text" ng-model="nome"/>
+									</div>
+									<div class="input-group input-group-sm">
+										Description <input class="form-control" type="text" ng-model="descricao"/>
+									</div>
+									<div class="input-group input-group-sm">
+										Link<input class="form-control" type="text" ng-model="href"/>
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer" >
+								<div class="btn-group" role="group"> 
+									<button title="Criar um atalho no grupo: {{grupo.nome}}" type="button" ng-click="salva(nome, descricao, href, grupo.nome)" class="btn btn-xs btn-{{grupo.color}}"	ng-repeat="grupo in Grupos track by $index">
+										<i class="glyphicon glyphicon-plus"></i> {{grupo.nome}}
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default" >
+							<div class="panel-heading">Group</div>
+							<div class="panel-body">
+								<div class="form-inline" role="form">
+									<div class="input-group input-group-sm"> 
+										Description<input class="form-control" type="text" ng-model="grupo"/>
+									</div> 
+								</div> 
+							</div> 
+							<div class="panel-footer" >
+								<div class="btn-group" role="group">
+									<button title="Criar um Grupo de Atalhos" type="button" ng-click="criar(grupo)" 
+										class="btn btn-xs btn-default">
+										<i class="glyphicon glyphicon-plus"> New</i> 
+									</button>
+								</div> 
+							</div>
+						</div> 
+					</div>  
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-9" role="main" id="top"> 
+
+				<div class="panel panel-{{grupo.color}}" ng-repeat="grupo in Grupos track by $index"> 
+					<div class="panel-heading" id="{{grupo.nome}}">
+						{{grupo.nome}}
+						<a class="btn btn-danger btn-xs" ng-show="checked" ng-click="apagar(grupo.nome)">
+							<i class="glyphicon glyphicon-minus"></i>
+						</a>
+					</div>
+					<div class="panel-body">
+						<div class="col-sm-4" ng-repeat="saldo in Atalhos[grupo.nome] | orderBy:'nome' track by $index">
+							<h3 id="{{grupo.nome}}{{saldo.nome}}"> {{saldo.nome}}
+								<a target='blank' href="{{saldo.href}}" class="btn btn-xs	btn-default">
+									<i class="glyphicon glyphicon-new-window"></i>
+								</a>
+							</h3>
+							<p> {{saldo.descricao}}
+								<a ng-show="checked" class="btn btn-xs	btn-danger" ng-click="remove(saldo, grupo.nome)">Remove</a>
+							</p>
+						</div>
+					</div>
+				</div> 
+				<div class="bs-docs-section"> 
+					<h1 id="download" class="page-header">Backup</h1> 
+					<p class="lead">Have an existing LinkHelper? <label class="btn-link">  <input type="file" id="files"/></label></p>
+					<p class="lead">Or <label class="btn-link"> <a ng-click="backup( )"> generate </button>!</label></p>
+					<a type="button" id='ID_Download'/></p>  
+				</div> 
+
+
+				<footer class="bs-docs-section"> 
+					<p>Designed and built by <a href="http://www.danps.com.br" target="_blank">Danps</a>. Maintained by the Danps team.
+					<a class="btn btn-xs btn-default" href="https://github.com/danps/LinkHelper">Source Code </a>
+				</footer> 
+			</div>
+			<div class="col-md-3" role="complementary">
+				<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix-top">
+					<ul class="nav bs-docs-sidenav">
+						<li> 
+							<a href="#Edit" ng-click="edit()">Edition mode</a>
+						</li>
+						<li class="" ng-repeat="grupo in Grupos track by $index">
+							<a href="#{{grupo.nome}}">{{grupo.nome}} </a>
+						</li> 
+						<li>
+							<a href="#download">Backup</a> 
+						</li>  
+					</ul> 
+					<a class="back-to-top" href="#top">Back to top</a>
+				</nav>
+			</div>	 
+		</div>	
+	</div>
+
+
+	<script>
+	function handleFileSelect(evt) {
+		var files = evt.target.files;
+		for (var i = 0, f; f = files[i]; i++) 
+		{
+			var reader = new FileReader();
+			reader.onload = (function(f) {
+				return function(e) {
+					console.log (" " + e.target.result);
+					var a = JSON.parse(e.target.result);
+					if(a && a.LinksHelper && a.LinksHelper != null)
+					{
+						localStorage.setItem("DanpsAtalho", JSON.stringify( a.LinksHelper));  
+					} 
+					location.reload();
+				};
+			})(f);
+			reader.readAsBinaryString(f);
+		}
+	}
+	document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	</script>
+
+</body>
+</html>
